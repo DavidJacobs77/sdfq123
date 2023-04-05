@@ -4,7 +4,7 @@
 import random
 
 
-print("Welcome to the Help Desk Ticketing System Prototype.")
+print("Hello welcome to the Help Desk Ticketing System Prototype.")
 count = 0
 TK = 2000
 Update = 0
