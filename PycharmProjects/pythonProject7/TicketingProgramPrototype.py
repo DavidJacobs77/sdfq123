@@ -4,15 +4,14 @@
 import random
 
 
-print("Hello welcome to the Help Desk Ticketing System Prototype.")
+print("Welcome to the Help Desk Ticketing System Prototype.")
 count = 0
 TK = 2000
 Update = 0
 StValue = 0
 statOv = 0
 statCv = 0
-trpv = 0
-trps = 0
+status = 0
 (tkv, tc, a, b, c, d, e, f, g, h, trp) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 (TK1, ticketcreator1, firstname1, surname1, staffID1, emailAd1, category1, descript1, priority1, status1, ticketresp1) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -20,6 +19,7 @@ trps = 0
 (TK3, ticketcreator3, firstname3, surname3, staffID3, emailAd3, category3, descript3, priority3, status3, ticketresp3) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 (TK4, ticketcreator4, firstname4, surname4, staffID4, emailAd4, category4, descript4, priority4, status4, ticketresp4) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 (TK5, ticketcreator5, firstname5, surname5, staffID5, emailAd5, category5, descript5, priority5, status5, ticketresp5) = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
 
 def defcategory(v):
     if v == "1":
@@ -124,7 +124,9 @@ def endchoice(v):
         slc = 3
     if v == "4":
         slc = 4
-    if v != "1" and v != "2" and v != "3" and v != "4":
+    if v == "5":
+        slc = 5
+    if v != "1" and v != "2" and v != "3" and v != "4" and v != "5":
         slc = 0
 
     return slc
@@ -160,6 +162,9 @@ def ViewTicket():
 def ViewUpdate():
     return
 
+
+
+
 """" This code is the home page of the program. It gives a selection of its functions and displays the number of open and closed tickets """
 
 def MainMenu():
@@ -172,15 +177,18 @@ def MainMenu():
     print("1. Create a new ticket")
     print("2. View tickets")
 
-    print("\nThe number of open tickets: ", statOv)
-    print("The number of closed tickets: ", statCv)
+    def TicketStats():
+        print("\nThe number of tickets submitted: ", TK - 2000)
+        print("The number of tickets open for response: ", statOv)
+        print("The number of tickets resolved: ", statCv)
+    TicketStats()
 
     j = menuchoice(input("\nPlease select an item "))
     while j == 0:
         j = menuchoice(input("Please select a valid number "))
     if j == 1 and count >= 6:
         print("\n-------------------------------------------------------")
-        print("\nThis action cannot be completed as the ticket folder2 is full")
+        print("\nThis action cannot be completed as the ticket folder is full")
         MainMenu()
     if j == 1 and count <= 5:
         print("New Ticket", count)
@@ -204,12 +212,15 @@ def TicketForm():
     global count
     global TK
     global statOv
+    global statCv
     global TK1, ticketcreator1, firstname1, surname1, staffID1, emailAd1, category1, descript1, priority1, status1, ticketresp1
     global TK2, ticketcreator2, firstname2, surname2, staffID2, emailAd2, category2, descript2, priority2, status2, ticketresp2
     global TK3, ticketcreator3, firstname3, surname3, staffID3, emailAd3, category3, descript3, priority3, status3, ticketresp3
     global TK4, ticketcreator4, firstname4, surname4, staffID4, emailAd4, category4, descript4, priority4, status4, ticketresp4
     global TK5, ticketcreator5, firstname5, surname5, staffID5, emailAd5, category5, descript5, priority5, status5, ticketresp5
 
+    ticketresp = "Not Yet Provided"
+    status = "Open"
     ticketcreator = input("Ticket creator's name ")
     firstname = input("Please enter the client's first name ")
     surname = input("Please enter the client's surname ")
@@ -240,9 +251,8 @@ def TicketForm():
 
     if len(ticketcreator) > 2 and len(firstname) > 0  and len(surname) > 0:
 
-        number1 = random.randint(1000, 9999)
-        number1 = str(number1)
-        password = firstname[0] + surname[0] + ticketcreator[0] + ticketcreator[1] + ticketcreator[2] + number1
+
+        password = firstname[0] + surname[0] + ticketcreator[0:3]
 
         descriptV = str.lower(descript)
 
@@ -258,7 +268,10 @@ def TicketForm():
 
         if substring == 2:
 
-                descript = "Your request for a change of password has been detected. Your new password is: ", password
+                ticketresp = "Your new password is: ", password
+                status = "Closed"
+                statOv = statOv - 1
+                statCv = statCv + 1
 
 
     print("Please choose a priority level for the ticket: \n")
@@ -273,8 +286,6 @@ def TicketForm():
         y = defpriority(input("Please select a valid number "))
     priority = y
 
-    status = "Open"
-    ticketresp = "Not Yet Provided"
     TK = TK + 1
     print("\nTicket Number", TK, "is now open and appears as follows\n")
     print("---------------------------------------------------")
@@ -301,8 +312,8 @@ def TicketForm():
     if count == 5:
         (TK5, ticketcreator5, firstname5, surname5, staffID5, emailAd5, category5, descript5, priority5, status5, ticketresp5) = (TK, ticketcreator, firstname, surname, staffID, emailAd, category, descript, priority, status, ticketresp)
 
-    input("\nPress Enter to return to the main menu")
-    print("-------------------------------------------------------")
+    input("Press Enter to return to the main menu")
+    print("\n-------------------------------------------------------")
 
     MainMenu()
 
@@ -313,18 +324,18 @@ TicketForm()
 def ViewTicket():
     global tkv, tc, a, b, c, d, e, f, g, h, trp
     global count
-    global trpv
-    global trps
     global Update
     global StValue
     global statOv
     global statCv
+    global status
+    StValue = status
     global TK1, ticketcreator1, firstname1, surname1, staffID1, emailAd1, category1, descript1, priority1, status1, ticketresp1
     global TK2, ticketcreator2, firstname2, surname2, staffID2, emailAd2, category2, descript2, priority2, status2, ticketresp2
     global TK3, ticketcreator3, firstname3, surname3, staffID3, emailAd3, category3, descript3, priority3, status3, ticketresp3
     global TK4, ticketcreator4, firstname4, surname4, staffID4, emailAd4, category4, descript4, priority4, status4, ticketresp4
     global TK5, ticketcreator5, firstname5, surname5, staffID5, emailAd5, category5, descript5, priority5, status5, ticketresp5
-
+    print("----------------------------------------------------------")
     if count > 1:
         print("\n1. Ticket Number:",TK1, firstname1, surname1)
     if count > 2:
@@ -335,50 +346,29 @@ def ViewTicket():
         print("\n4. Ticket Number:",TK4, firstname4, surname4)
     if count > 5:
         print("\n5. Ticket Number:",TK5, firstname5, surname5)
-    print ("\n------------------------------------------------------------")
+    print("\n--------------------------------------------------------")
     print("\n0. Return to Main Menu")
     j = ticketchoice(input("\nWhich ticket would you like to view. Please select an item "))
     if j == 100:
         count = count - 1
-        print("-------------------------------------------------------")
+        print("------------------------------------------------------")
         MainMenu()
     while j == 0:
         j = ticketchoice(input("Please select a valid number "))
 
     if j == 1:
-        if trpv == 1:
-            ticketresp1 = trps
-        if trpv == 2:
-            ticketresp1 = trps
         (tkv, tc, a, b, c, d, e, f, g, h, trp) = (TK1, ticketcreator1, firstname1, surname1, staffID1, emailAd1, category1, descript1, priority1, status1, ticketresp1)
 
     if j == 2:
-        if trpv == 1:
-            ticketresp2 = trps
-
-        if trpv == 2:
-            ticketresp2 = trps
         (tkv, tc, a, b, c, d, e, f, g, h, trp) = (TK2, ticketcreator2, firstname2, surname2, staffID2, emailAd2, category2, descript2, priority2, status2, ticketresp2)
 
     if j == 3:
-        if trpv == 1:
-            ticketresp3 = trps
-        if trpv == 2:
-            ticketresp3 = trps
         (tkv, tc, a, b, c, d, e, f, g, h, trp) = (TK3, ticketcreator3, firstname3, surname3, staffID3, emailAd3, category3, descript3, priority3, status3, ticketresp3)
 
     if j == 4:
-        if trpv == 1:
-            ticketresp4 = trps
-        if trpv == 2:
-            ticketresp4 = trps
         (tkv, tc, a, b, c, d, e, f, g, h, trp) = (TK4, ticketcreator4, firstname4, surname4, staffID4, emailAd4, category4, descript4, priority4, status4, ticketresp4)
 
     if j == 5:
-        if trpv == 1:
-            ticketresp1 = trps
-        if trpv == 2:
-            ticketresp1 = trps
         (tkv, tc, a, b, c, d, e, f, g, h, trp) = (TK5, ticketcreator5, firstname5, surname5, staffID5, emailAd5, category5, descript5, priority5, status5, ticketresp5)
 
     print("\n---------------------------------------------------------")
@@ -396,20 +386,21 @@ def ViewTicket():
     print("What action would you like to take?\n")
     print("1. Change ticket priority")
     print("2. Change ticket status")
-    print("3. View more tickets")
-    print("4. Return to main menu")
+    print("3. Update ticket response")
+    print("4. View more tickets")
+    print("5. Return to main menu")
     w = endchoice(input("\nPlease select an option "))
     while w == 0:
         w = endchoice(input("Please select a valid number "))
-    if w == 3:
-        ViewTicket()
     if w == 4:
+        ViewTicket()
+    if w == 5:
             print("-------------------------------------------------------")
             count = count - 1
             MainMenu()
 
     if w == 1:
-        print("\nThis ticket has a priority of", g, "What would you like to change it to?\n")
+        print("\nThis ticket has a", g, "priority. What would you like to change it to?\n")
         if g == "HIGH":
              print("1. MEDIUM")
              print("2. LOW")
@@ -451,6 +442,7 @@ def ViewTicket():
         if j == 5 and (u == 1 or u == 2):
                 priority5 = PrValue
                 g = PrValue
+        StValue = h
         Update = 1
         ViewUpdate()
 
@@ -468,9 +460,6 @@ def ViewTicket():
             statOv = statOv - 1
             statCv = statCv + 1
             StValue = "Closed"
-            trp = "This ticket has been responded to"
-            trps = "This ticket has been responded to"
-            trpv = 1
         if j == 1 and z == 1:
             status1 = StValue
         if j == 2 and z == 1:
@@ -481,7 +470,6 @@ def ViewTicket():
             status4 = StValue
         if j == 5 and z == 1:
             status5 = StValue
-            h = StValue
         Update = 2
         ViewUpdate()
 
@@ -499,9 +487,6 @@ def ViewTicket():
             statOv = statOv + 1
             statCv = statCv - 1
             StValue = "Open"
-            trp = "This ticket needs further response"
-            trps = "This ticket needs further response"
-            trpv = 2
         if j == 1 and x == 1:
             status1 = StValue
         if j == 2 and x == 1:
@@ -512,15 +497,30 @@ def ViewTicket():
             status4 = StValue
         if j == 5 and x == 1:
             status5 = StValue
-            h = StValue
         Update = 3
+        ViewUpdate()
+
+    if w == 3:
+        StValue = h
+        trp = input("Add a response: ")
+        if j == 1:
+            ticketresp1 = trp
+        if j == 2:
+            ticketresp2 = trp
+        if j == 3:
+            ticketresp3 = trp
+        if j == 4:
+            ticketresp4 = trp
+        if j == 5:
+            ticketresp5 = trp
+        Update = 4
         ViewUpdate()
 ViewTicket()
 
-""" this code generates a ticket update when the priority or status is changed """
+""" this code generates a ticket update when the priority or status or response is changed """
 
 def ViewUpdate():
-    global tkv, tc, a, b, c, d, e, f, g, h, Update, StValue, trp
+    global tkv, tc, a, b, c, d, e, f, g, Update, StValue, trp
     print("\nTicket Update")
     print("---------------------------------------------------------")
     print("Ticket Number: ", tkv)
@@ -535,11 +535,13 @@ def ViewUpdate():
     print("Ticket Response: ", trp)
     print("---------------------------------------------------------\n")
     if Update == 1:
-        print("This ticket's priority level has been updated")
+        print("This ticket's priority level has been updated\n")
     if Update == 2:
-        print("This ticket has been closed")
+        print("This ticket has been closed\n")
     if Update == 3:
-        print("This ticket has been reopened")
+        print("This ticket has been reopened\n")
+    if Update == 4:
+        print("Ticket response has been updated\n")
     Update = 0
     ViewTicket()
 
