@@ -348,7 +348,7 @@ def ViewTicket(self):
 
     print("---------------------------------------------------------")
     if count > 1:
-        print("\n1. Ticket Number:", self.ticket1(0), self.ticket1[2], self.ticket1[3])
+        print("\n1. Ticket Number:", self.ticket1[0], self.ticket1[2], self.ticket1[3])
     if count > 2:
         print("\n2. Ticket Number:", self.ticket2[0], self.ticket2[2], self.ticket2[3])
     if count > 3:
