@@ -21,7 +21,7 @@ class Ticket:
     # this function prints the inputted values depending on their position in the ticket list
     def Printticket(self):
 
-        print("---------------------------------------------------")
+        print("\n---------------------------------------------------")
         print("Ticket Number: ", self.counter)
         print("Ticket Creator: ", self.ticketcreator)
         print("Client's Staff ID No: ", self.staffID)
@@ -43,7 +43,7 @@ class Ticket:
 
         self.response = input("Add a response: ")
         self.status = "Closed"
-        Ticket.switch = 0
+
         Ticket.statusO = Ticket.statusO - 1
         Ticket.statusC = Ticket.statusC + 1
 
@@ -53,14 +53,37 @@ class Ticket:
 
         if self.status == "Open":
             print("\nThis ticket is already open")
-            Ticket.var = 1
+
 
         if self.status == "Closed":
             Ticket.statusO = Ticket.statusO + 1
             Ticket.statusC = Ticket.statusC - 1
-            print("\nThis ticket has been reopened\n")
+            print("\nThis ticket has been reopened")
             self.status = "Open"
-            Ticket.switch = 1
+
+    def numberselect(self):
+        for ticket in Ticket.tickets:
+            print(ticket.counter)
+        while True:
+            number = input("\nEnter a ticket number to add a response: \n")
+            if number.isdigit():
+                number = int(number)
+            else:
+                print("\nTicket number has to be numeric")
+                continue
+
+            ticketToRespond = None
+            for ticket in Ticket.tickets:
+                if ticket.counter == number:
+                    ticketToRespond = ticket
+                    break
+
+            if ticketToRespond == None:
+                print("\nTicket not found with this ID")
+                continue
+            else:
+                break
+
 
     # this function enables the user to input all fields.
     # status and response are automatically assigned
@@ -75,9 +98,9 @@ class Ticket:
         emailAd = input("Please enter your email: ")
         descript = input("Please enter your description: ")
         status = "Open"
-        Ticket.switch = 1
+
         response = "Not Yet Available"
-        print("\nTicket Number", Ticket.counter, "is now open and appears as follows\n")
+        print("\nTicket Number", Ticket.counter, "is now open and appears as follows")
         substring = 0
         if len(ticketcreator) > 2 and len(staffID) > 1:
             password = staffID[0:2] + ticketcreator[0:3]
@@ -97,7 +120,7 @@ class Ticket:
             if substring == 2:
                response = "Your new password is: ", password
                status = "Closed"
-               Ticket.switch = 0
+
                Ticket.statusO = Ticket.statusO - 1
                Ticket.statusC = Ticket.statusC + 1
         ticket = Ticket(Ticket.counter, ticketcreator, staffID, emailAd, descript, status, response)
@@ -153,39 +176,18 @@ class Main():
             print("\nThere are no active tickets to respond to")
 
         if j == 3 and Ticket.counter > 2000:
-            for ticket in Ticket.tickets:
-                print(ticket.counter)
-            while True:
-                number = input("\nEnter a ticket number to add a response: ")
-                if number.isdigit():
-                    number=int(number)
-                else:
-                    print("Ticket number has to be numeric")
-                    continue
 
-                ticketToRespond = None
-                for ticket in Ticket.tickets:
-                    if ticket.counter == number:
-                       ticketToRespond = ticket
-                       break
+            Ticket.numberselct()
 
-                if ticketToRespond == None:
-                    print("Ticket not found with this ID")
-                    continue
-                else:
-                    break
 
-            if ticketToRespond.status == "Open":
-               Ticket.switch = 1
-
-            if ticketToRespond != None and Ticket.switch == 0:
+            if ticketToRespond.status == "Closed":
                 print("\nThis ticket is currently closed")
+                continue
 
-            if ticketToRespond != None and Ticket.switch == 1:
-               ticketToRespond.Printticket()
-               ticketToRespond.respond()
-               print("\nThis ticket's response has been updated\n")
-               ticketToRespond.Printticket()
+            ticketToRespond.Printticket()
+            ticketToRespond.respond()
+            print("\nThis ticket's response has been updated")
+            ticketToRespond.Printticket()
 
         if j == 4 and Ticket.counter == 2000:
             print("\nThere are no active tickets to reopen")
@@ -193,32 +195,40 @@ class Main():
         if j == 4 and Ticket.counter > 2000:
             for ticket in Ticket.tickets:
                 print(ticket.counter)
+            while True:
+                number = input("\nEnter a ticket number to reopen the ticket: \n")
+                if number.isdigit():
+                    number = int(number)
+                else:
+                    print("\nTicket number has to be numeric")
+                    continue
 
-            number = int(input("\nEnter a ticket number to reopen the ticket: "))
-            ticketToRespond = None
-            for ticket in Ticket.tickets:
-                if ticket.counter == number:
-                    ticketToRespond = ticket
-                    break
-            if ticketToRespond != None:
-                ticketToRespond.Printticket()
-                ticketToRespond.reopen()
-            if Ticket.var == 0:
-                ticketToRespond.Printticket()
-            if Ticket.var == 1:
-               Ticket.var = 0
+                ticketToRespond = None
+                for ticket in Ticket.tickets:
+                    if ticket.counter == number:
+                        ticketToRespond = ticket
+                        break
+
+                if ticketToRespond == None:
+                     print("\nTicket not found with this ID")
+                     continue
+                else:
+                     break
+
+            if ticketToRespond.status == "Open":
+                print("\nThis ticket is already open")
+                continue
+
+            ticketToRespond.Printticket()
+            ticketToRespond.reopen()
+            ticketToRespond.Printticket()
+
+
 
         if j == 5:
             Ticket.TicketStats()
 
         if j == 6:
-            exit()
+             exit()
 
 
-"""
-   s_ID=input("Please enter a ticket number to view ")
-                    student=None
-                    for x in Main.students:
-                         if x.ID == s_ID:
-                            student=x
-                            break"""

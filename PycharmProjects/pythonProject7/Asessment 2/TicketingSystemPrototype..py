@@ -75,7 +75,7 @@ class Ticket:
         emailAd = input("Please enter your email: ")
         descript = input("Please enter your description: ")
         status = "Open"
-
+        Ticket.switch = 1
         response = "Not Yet Available"
         print("\nTicket Number", Ticket.counter, "is now open and appears as follows")
         substring = 0
@@ -97,7 +97,7 @@ class Ticket:
             if substring == 2:
                response = "Your new password is: ", password
                status = "Closed"
-
+               Ticket.switch = 0
                Ticket.statusO = Ticket.statusO - 1
                Ticket.statusC = Ticket.statusC + 1
         ticket = Ticket(Ticket.counter, ticketcreator, staffID, emailAd, descript, status, response)
@@ -190,40 +190,23 @@ class Main():
         if j == 4 and Ticket.counter > 2000:
             for ticket in Ticket.tickets:
                 print(ticket.counter)
-            while True:
-                number = input("\nEnter a ticket number to reopen the ticket: \n")
-                if number.isdigit():
-                    number = int(number)
-                else:
-                    print("\nTicket number has to be numeric")
-                    continue
 
-                ticketToRespond = None
-                for ticket in Ticket.tickets:
-                    if ticket.counter == number:
-                        ticketToRespond = ticket
-                        break
-
-                if ticketToRespond == None:
-                     print("\nTicket not found with this ID")
-                     continue
-                else:
-                     break
-
-            if ticketToRespond.status == "Open":
-                print("\nThis ticket is already open")
-                continue
-
-            ticketToRespond.Printticket()
-            ticketToRespond.reopen()
-            ticketToRespond.Printticket()
-
-
+            number = int(input("\nEnter a ticket number to reopen the ticket: "))
+            ticketToRespond = None
+            for ticket in Ticket.tickets:
+                if ticket.counter == number:
+                    ticketToRespond = ticket
+                    break
+            if ticketToRespond != None:
+                ticketToRespond.Printticket()
+                ticketToRespond.reopen()
+            if Ticket.var == 0:
+                ticketToRespond.Printticket()
 
         if j == 5:
             Ticket.TicketStats()
 
         if j == 6:
-             exit()
+            exit()
 
 
